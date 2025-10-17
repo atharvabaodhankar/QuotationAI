@@ -4,6 +4,7 @@ import QuotationForm from './components/QuotationForm'
 import QuotationDisplay from './components/QuotationDisplay'
 import SampleExamples from './components/SampleExamples'
 import LoadingSpinner from './components/LoadingSpinner'
+import StatsPanel from './components/StatsPanel'
 
 function App() {
   const { loading, quote, error, generateQuote } = useQuotationAI();
@@ -57,6 +58,9 @@ function App() {
           <p className="mt-1">Generate professional quotations in seconds ⚡</p>
         </footer>
       </div>
+
+      {/* Floating Stats Panel */}
+      <StatsPanel />
     </div>
   )
 }

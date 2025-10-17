@@ -25,15 +25,31 @@ function QuotationForm({ onGenerate, loading, initialValue = '' }) {
         <textarea
           value={requirement}
           onChange={(e) => setRequirement(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+              e.preventDefault();
+              handleSubmit(e);
+            }
+          }}
           placeholder="e.g., I want an ecommerce website for my clothing brand with admin panel and payment gateway"
           className="w-full h-32 p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           disabled={loading}
+          maxLength={500}
         />
+        
+        <div className="flex items-center justify-between mt-4">
+          <div className="text-xs text-gray-500">
+            Press Ctrl+Enter to generate quickly
+          </div>
+          <div className="text-xs text-gray-500">
+            {requirement.length}/500 characters
+          </div>
+        </div>
         
         <button
           type="submit"
           disabled={loading || !requirement.trim()}
-          className="mt-4 w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+          className="mt-2 w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
         >
           {loading ? (
             <div className="flex items-center justify-center">
