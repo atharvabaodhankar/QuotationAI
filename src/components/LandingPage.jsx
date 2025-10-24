@@ -20,7 +20,7 @@ function LandingPage() {
               <div className="hidden md:flex flex-1 items-center justify-end gap-8">
                 <div className="flex items-center gap-9">
                   <a className="text-sm font-medium leading-normal text-gray-600 hover:text-red-500 transition-colors" href="#features">Features</a>
-                  <a className="text-sm font-medium leading-normal text-gray-600 hover:text-red-500 transition-colors" href="https://github.com/yourusername/quotationai" target="_blank" rel="noopener noreferrer">GitHub</a>
+                  <a className="text-sm font-medium leading-normal text-gray-600 hover:text-red-500 transition-colors" href="https://github.com/tejaspatil1936/quotationai" target="_blank" rel="noopener noreferrer">GitHub</a>
                 </div>
                 <Link 
                   to="/tool"
@@ -151,7 +151,7 @@ function LandingPage() {
 
             {/* Footer */}
             <footer className="flex flex-col md:flex-row items-center justify-between gap-6 py-10 text-sm text-gray-600 border-t border-gray-200 mt-16 md:mt-24">
-              <p>© 2024 QuotationAI. Free & Open Source.</p>
+              <p>© 2025 QuotationAI. Free & Open Source.</p>
               <div className="flex items-center gap-6">
                 <a className="hover:text-red-500 transition-colors" href="https://github.com/yourusername/quotationai" target="_blank" rel="noopener noreferrer">GitHub</a>
                 <a className="hover:text-red-500 transition-colors" href="#">Documentation</a>
