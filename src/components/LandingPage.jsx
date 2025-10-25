@@ -7,34 +7,25 @@ function LandingPage() {
         <div className="flex flex-1 justify-center py-5">
           <div className="layout-content-container flex w-full max-w-5xl flex-col flex-1 px-4 md:px-10">
             {/* Header */}
-            <header className="sticky top-4 z-50 flex items-center justify-between whitespace-nowrap rounded-full border border-gray-200 bg-white/80 px-6 py-3 backdrop-blur-md">
+            <header className="sticky top-4 z-50 flex items-center justify-between whitespace-nowrap rounded-full border border-gray-200 glass px-6 py-3 animate-fadeInUp hover-lift transition-all">
               <div className="flex items-center gap-4 text-gray-800">
-                <div className="size-6 text-red-500">
-                  <svg
-                    fill="none"
-                    viewBox="0 0 48 48"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z"
-                      fill="currentColor"
-                    ></path>
-                  </svg>
+                <div className="size-8 rounded-lg overflow-hidden bg-gradient-primary p-1">
+                  <img src="/logo.png" alt="QuotationAI" className="w-full h-full object-contain filter brightness-0 invert" />
                 </div>
-                <h2 className="text-lg font-bold leading-tight tracking-[-0.015em]">
+                <h2 className="text-lg font-bold leading-tight tracking-[-0.015em] font-display">
                   QuotationAI
                 </h2>
               </div>
               <div className="hidden md:flex flex-1 items-center justify-end gap-8">
                 <div className="flex items-center gap-9">
                   <a
-                    className="text-sm font-medium leading-normal text-gray-600 hover:text-red-500 transition-colors"
+                    className="text-sm font-medium leading-normal text-gray-600 hover:text-red-500 transition-colors font-body"
                     href="#features"
                   >
                     Features
                   </a>
                   <a
-                    className="text-sm font-medium leading-normal text-gray-600 hover:text-red-500 transition-colors"
+                    className="text-sm font-medium leading-normal text-gray-600 hover:text-red-500 transition-colors font-body"
                     href="https://github.com/tejaspatil1936/quotationai"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -44,7 +35,7 @@ function LandingPage() {
                 </div>
                 <Link
                   to="/tool"
-                  className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-gray-800 text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-gray-700 transition-shadow shadow-sm hover:shadow-lg"
+                  className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-gradient-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover-glow transition-all font-body"
                 >
                   <span className="truncate">Try Now - Free</span>
                 </Link>
@@ -56,94 +47,105 @@ function LandingPage() {
 
             <main className="flex flex-col gap-16 md:gap-24 mt-16">
               {/* Hero Section */}
-              <section className="relative flex flex-col items-center justify-center gap-6 text-center md:gap-8 py-10">
-                <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(255,193,7,0.1),rgba(255,255,255,0))]"></div>
-                <div className="flex flex-col gap-4">
-                  <h1 className="text-4xl font-black leading-tight tracking-tighter md:text-6xl text-gray-800">
+              <section className="relative flex flex-col items-center justify-center gap-6 text-center md:gap-8 py-20 animate-fadeInUp">
+                <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(255,71,66,0.1),rgba(255,255,255,0))]"></div>
+                <div className="flex flex-col gap-6 animate-fadeInScale">
+                  <div className="inline-flex items-center px-4 py-2 rounded-full bg-red-50 text-red-600 text-sm font-medium border border-red-200 animate-slideInRight">
+                    <span className="mr-2">🚀</span>
+                    Free & Open Source AI Tool
+                  </div>
+                  <h1 className="text-4xl font-black leading-tight tracking-tighter md:text-6xl text-gray-800 font-display">
                     Smart quotations.{" "}
-                    <span className="text-red-500">Instantly.</span>{" "}
+                    <span className="text-red-500 bg-gradient-to-r from-red-500 to-red-600 bg-clip-text text-transparent">Instantly.</span>{" "}
                     Beautifully.
                   </h1>
-                  <h2 className="text-base font-medium leading-normal text-gray-600 md:text-lg max-w-2xl">
+                  <h2 className="text-base font-medium leading-normal text-gray-600 md:text-lg max-w-2xl font-body">
                     QuotationAI instantly generates professional project
                     quotations so you can focus on winning more bids, not on
-                    paperwork. Free & Open Source.
+                    paperwork. Powered by advanced AI.
                   </h2>
                 </div>
-                <Link
-                  to="/tool"
-                  className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-8 bg-red-500 text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-red-600 transition-shadow shadow-md hover:shadow-xl"
-                >
-                  <span className="truncate">
-                    Generate Your First Quote for Free
-                  </span>
-                </Link>
+                <div className="flex flex-col sm:flex-row gap-4 animate-fadeInUp">
+                  <Link
+                    to="/tool"
+                    className="flex min-w-[200px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-14 px-8 bg-gradient-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover-glow hover-lift transition-all font-body group"
+                  >
+                    <span className="truncate mr-2">Generate Your First Quote</span>
+                    <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                  </Link>
+                  <a
+                    href="#features"
+                    className="flex min-w-[200px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-14 px-8 bg-white text-gray-800 text-base font-medium leading-normal tracking-[0.015em] border-2 border-gray-200 hover:border-red-300 hover:bg-red-50 transition-all font-body"
+                  >
+                    <span className="truncate">Learn More</span>
+                  </a>
+                </div>
               </section>
 
               {/* Features Section */}
-              <section id="features" className="flex flex-col gap-10 py-10">
+              <section id="features" className="flex flex-col gap-10 py-20 animate-fadeInUp">
                 <div className="flex flex-col gap-3 text-center">
-                  <h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl text-gray-800">
+                  <h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl text-gray-800 font-display">
                     Everything you need to create winning quotes
                   </h2>
-                  <p className="text-base font-normal leading-normal text-gray-600 max-w-3xl mx-auto">
+                  <p className="text-base font-normal leading-normal text-gray-600 max-w-3xl mx-auto font-body">
                     Our powerful features are designed to save you time and help
                     you create professional, accurate quotations with ease.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-                  <div className="flex flex-col gap-4 rounded-xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1">
-                    <div className="flex items-center justify-center size-12 rounded-lg bg-purple-100 text-purple-600">
+                  <div className="flex flex-col gap-4 rounded-xl border border-gray-100 bg-white p-6 shadow-sm hover-lift transition-all animate-fadeInUp group">
+                    <div className="flex items-center justify-center size-12 rounded-lg bg-purple-100 text-purple-600 group-hover:scale-110 transition-transform">
                       <span className="material-symbols-outlined">
                         auto_awesome
                       </span>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <h3 className="text-base font-bold leading-tight text-gray-800">
+                      <h3 className="text-base font-bold leading-tight text-gray-800 font-display">
                         AI-Powered Generation
                       </h3>
-                      <p className="text-sm font-normal leading-normal text-gray-600">
+                      <p className="text-sm font-normal leading-normal text-gray-600 font-body">
                         Leverage our AI to generate accurate quotations in just
                         a few clicks, saving you hours of manual work.
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-4 rounded-xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1">
-                    <div className="flex items-center justify-center size-12 rounded-lg bg-green-100 text-green-600">
+                  <div className="flex flex-col gap-4 rounded-xl border border-gray-100 bg-white p-6 shadow-sm hover-lift transition-all animate-fadeInUp group" style={{animationDelay: '0.1s'}}>
+                    <div className="flex items-center justify-center size-12 rounded-lg bg-green-100 text-green-600 group-hover:scale-110 transition-transform">
                       <span className="material-symbols-outlined">tune</span>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <h3 className="text-base font-bold leading-tight text-gray-800">
+                      <h3 className="text-base font-bold leading-tight text-gray-800 font-display">
                         Easy Customization
                       </h3>
-                      <p className="text-sm font-normal leading-normal text-gray-600">
+                      <p className="text-sm font-normal leading-normal text-gray-600 font-body">
                         Easily apply discounts, select from multiple currencies,
                         and tailor every detail to fit your client's needs.
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-4 rounded-xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1">
-                    <div className="flex items-center justify-center size-12 rounded-lg bg-blue-100 text-blue-600">
+                  <div className="flex flex-col gap-4 rounded-xl border border-gray-100 bg-white p-6 shadow-sm hover-lift transition-all animate-fadeInUp group" style={{animationDelay: '0.2s'}}>
+                    <div className="flex items-center justify-center size-12 rounded-lg bg-blue-100 text-blue-600 group-hover:scale-110 transition-transform">
                       <span className="material-symbols-outlined">
                         picture_as_pdf
                       </span>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <h3 className="text-base font-bold leading-tight text-gray-800">
+                      <h3 className="text-base font-bold leading-tight text-gray-800 font-display">
                         Professional Output
                       </h3>
-                      <p className="text-sm font-normal leading-normal text-gray-600">
+                      <p className="text-sm font-normal leading-normal text-gray-600 font-body">
                         Export your quotations as beautifully formatted,
                         professional PDF documents ready to send to clients.
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-4 rounded-xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1">
-                    <div className="flex items-center justify-center size-12 rounded-lg bg-yellow-100 text-yellow-600">
+                  <div className="flex flex-col gap-4 rounded-xl border border-gray-100 bg-white p-6 shadow-sm hover-lift transition-all animate-fadeInUp group" style={{animationDelay: '0.3s'}}>
+                    <div className="flex items-center justify-center size-12 rounded-lg bg-yellow-100 text-yellow-600 group-hover:scale-110 transition-transform">
                       <span className="material-symbols-outlined">devices</span>
                     </div>
                     <div className="flex flex-col gap-1">
