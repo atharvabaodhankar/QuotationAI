@@ -1,7 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
+import { gsap } from "gsap";
+import Confetti from "react-confetti";
+import { 
+  Sparkles, 
+  Zap, 
+  Rocket, 
+  Crown, 
+  Star, 
+  Heart,
+  CheckCircle2,
+  ArrowRight,
+  ArrowLeft,
+  Home,
+  RefreshCw,
+  Wand2,
+  Globe,
+  Smartphone,
+  ShoppingCart,
+  Cloud,
+  Target,
+  Code,
+  Database,
+  Shield,
+  CreditCard,
+  BarChart3,
+  Plug,
+  MessageCircle,
+  Bot,
+  Zap as Lightning,
+  Monitor
+} from "lucide-react";
 import useQuotationAI from "../hooks/useQuotationAI";
 import QuotationDisplay from "./QuotationDisplay";
 import LoadingSpinner from "./LoadingSpinner";
@@ -9,6 +40,10 @@ import LoadingSpinner from "./LoadingSpinner";
 function CinematicWizard() {
   const { loading, quote, error, generateQuote } = useQuotationAI();
   const [currentStep, setCurrentStep] = useState(1);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const cursorRef = useRef(null);
+  const backgroundRef = useRef(null);
   const [formData, setFormData] = useState({
     appName: '',
     projectType: '',
@@ -19,6 +54,47 @@ function CinematicWizard() {
   });
 
   const totalSteps = 6;
+
+  // Cursor follower
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+  const springConfig = { damping: 25, stiffness: 700 };
+  const cursorXSpring = useSpring(cursorX, springConfig);
+  const cursorYSpring = useSpring(cursorY, springConfig);
+
+  useEffect(() => {
+    const moveCursor = (e) => {
+      cursorX.set(e.clientX - 16);
+      cursorY.set(e.clientY - 16);
+    };
+
+    window.addEventListener('mousemove', moveCursor);
+    return () => window.removeEventListener('mousemove', moveCursor);
+  }, [cursorX, cursorY]);
+
+  // Background ambient animation
+  useEffect(() => {
+    if (backgroundRef.current) {
+      gsap.to(backgroundRef.current, {
+        backgroundPosition: "200% 200%",
+        duration: 20,
+        ease: "none",
+        repeat: -1,
+        yoyo: true
+      });
+    }
+  }, []);
+
+  // Step transition sound effect (visual feedback)
+  useEffect(() => {
+    if (currentStep > 1) {
+      // Trigger a subtle visual "ping" effect
+      const ping = document.createElement('div');
+      ping.className = 'fixed top-4 right-4 w-4 h-4 bg-red-500 rounded-full animate-ping pointer-events-none z-50';
+      document.body.appendChild(ping);
+      setTimeout(() => document.body.removeChild(ping), 1000);
+    }
+  }, [currentStep]);
 
   // Animation variants
   const pageVariants = {
@@ -82,34 +158,76 @@ function CinematicWizard() {
   };
 
   const projectTypes = [
-    { id: 'website', name: 'Website', icon: '🌐', desc: 'Static or dynamic websites', gradient: 'from-blue-500 to-cyan-500' },
-    { id: 'webapp', name: 'Web App', icon: '💻', desc: 'Interactive applications', gradient: 'from-purple-500 to-pink-500' },
-    { id: 'mobile', name: 'Mobile App', icon: '📱', desc: 'iOS/Android apps', gradient: 'from-green-500 to-emerald-500' },
-    { id: 'ecommerce', name: 'E-commerce', icon: '🛒', desc: 'Online stores', gradient: 'from-orange-500 to-red-500' },
-    { id: 'saas', name: 'SaaS Platform', icon: '☁️', desc: 'Software as a Service', gradient: 'from-indigo-500 to-purple-500' },
-    { id: 'custom', name: 'Custom', icon: '🎯', desc: 'Something unique', gradient: 'from-pink-500 to-rose-500' }
+    { 
+      id: 'website', 
+      name: 'Website', 
+      icon: Globe, 
+      desc: 'Static or dynamic websites', 
+      gradient: 'from-blue-500 to-cyan-500',
+      glow: 'shadow-blue-500/25'
+    },
+    { 
+      id: 'webapp', 
+      name: 'Web App', 
+      icon: Monitor, 
+      desc: 'Interactive applications', 
+      gradient: 'from-purple-500 to-pink-500',
+      glow: 'shadow-purple-500/25'
+    },
+    { 
+      id: 'mobile', 
+      name: 'Mobile App', 
+      icon: Smartphone, 
+      desc: 'iOS/Android apps', 
+      gradient: 'from-green-500 to-emerald-500',
+      glow: 'shadow-green-500/25'
+    },
+    { 
+      id: 'ecommerce', 
+      name: 'E-commerce', 
+      icon: ShoppingCart, 
+      desc: 'Online stores', 
+      gradient: 'from-orange-500 to-red-500',
+      glow: 'shadow-orange-500/25'
+    },
+    { 
+      id: 'saas', 
+      name: 'SaaS Platform', 
+      icon: Cloud, 
+      desc: 'Software as a Service', 
+      gradient: 'from-indigo-500 to-purple-500',
+      glow: 'shadow-indigo-500/25'
+    },
+    { 
+      id: 'custom', 
+      name: 'Custom', 
+      icon: Target, 
+      desc: 'Something unique', 
+      gradient: 'from-pink-500 to-rose-500',
+      glow: 'shadow-pink-500/25'
+    }
   ];
 
   const techStacks = [
-    { name: 'React', icon: '⚛️', color: 'bg-blue-100 text-blue-700 border-blue-200' },
-    { name: 'Next.js', icon: '▲', color: 'bg-gray-100 text-gray-700 border-gray-200' },
-    { name: 'Vue.js', icon: '💚', color: 'bg-green-100 text-green-700 border-green-200' },
-    { name: 'Angular', icon: '🅰️', color: 'bg-red-100 text-red-700 border-red-200' },
-    { name: 'Node.js', icon: '🟢', color: 'bg-green-100 text-green-700 border-green-200' },
-    { name: 'Python', icon: '🐍', color: 'bg-yellow-100 text-yellow-700 border-yellow-200' },
-    { name: 'Tailwind', icon: '🎨', color: 'bg-cyan-100 text-cyan-700 border-cyan-200' },
-    { name: 'Firebase', icon: '🔥', color: 'bg-orange-100 text-orange-700 border-orange-200' }
+    { name: 'React', icon: Code, color: 'bg-blue-100 text-blue-700 border-blue-200', glow: 'hover:shadow-blue-500/20' },
+    { name: 'Next.js', icon: Zap, color: 'bg-gray-100 text-gray-700 border-gray-200', glow: 'hover:shadow-gray-500/20' },
+    { name: 'Vue.js', icon: Star, color: 'bg-green-100 text-green-700 border-green-200', glow: 'hover:shadow-green-500/20' },
+    { name: 'Angular', icon: Crown, color: 'bg-red-100 text-red-700 border-red-200', glow: 'hover:shadow-red-500/20' },
+    { name: 'Node.js', icon: Database, color: 'bg-green-100 text-green-700 border-green-200', glow: 'hover:shadow-green-500/20' },
+    { name: 'Python', icon: Code, color: 'bg-yellow-100 text-yellow-700 border-yellow-200', glow: 'hover:shadow-yellow-500/20' },
+    { name: 'Tailwind', icon: Sparkles, color: 'bg-cyan-100 text-cyan-700 border-cyan-200', glow: 'hover:shadow-cyan-500/20' },
+    { name: 'Firebase', icon: Rocket, color: 'bg-orange-100 text-orange-700 border-orange-200', glow: 'hover:shadow-orange-500/20' }
   ];
 
   const commonFeatures = [
-    { name: 'Login System', icon: '🔐', desc: 'User authentication & management' },
-    { name: 'Payment Gateway', icon: '💳', desc: 'Secure payment processing' },
-    { name: 'Admin Dashboard', icon: '📊', desc: 'Management interface' },
-    { name: 'API Integration', icon: '🔌', desc: 'Third-party services' },
-    { name: 'Chat Support', icon: '💬', desc: 'Customer communication' },
-    { name: 'AI Integration', icon: '🤖', desc: 'Artificial intelligence features' },
-    { name: 'Real-time Updates', icon: '⚡', desc: 'Live data synchronization' },
-    { name: 'Mobile Responsive', icon: '📱', desc: 'Works on all devices' }
+    { name: 'Login System', icon: Shield, desc: 'User authentication & management' },
+    { name: 'Payment Gateway', icon: CreditCard, desc: 'Secure payment processing' },
+    { name: 'Admin Dashboard', icon: BarChart3, desc: 'Management interface' },
+    { name: 'API Integration', icon: Plug, desc: 'Third-party services' },
+    { name: 'Chat Support', icon: MessageCircle, desc: 'Customer communication' },
+    { name: 'AI Integration', icon: Bot, desc: 'Artificial intelligence features' },
+    { name: 'Real-time Updates', icon: Lightning, desc: 'Live data synchronization' },
+    { name: 'Mobile Responsive', icon: Smartphone, desc: 'Works on all devices' }
   ];
 
   const handleNext = () => {
@@ -137,7 +255,23 @@ function CinematicWizard() {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    setIsGenerating(true);
+    
+    // Screen flash effect
+    const flash = document.createElement('div');
+    flash.className = 'fixed inset-0 bg-white pointer-events-none z-50';
+    flash.style.opacity = '0';
+    document.body.appendChild(flash);
+    
+    gsap.to(flash, {
+      opacity: 0.8,
+      duration: 0.1,
+      yoyo: true,
+      repeat: 1,
+      onComplete: () => document.body.removeChild(flash)
+    });
+
     const requirement = `
 App Name: ${formData.appName}
 Project Type: ${formData.projectType}
@@ -147,8 +281,13 @@ Timeline: ${formData.timeline}
 Budget Range: ${formData.budget}
     `.trim();
 
-    generateQuote(requirement);
+    await generateQuote(requirement);
+    
+    // Trigger confetti and move to results
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 3000);
     setCurrentStep(totalSteps + 1);
+    setIsGenerating(false);
   };
 
   const isStepValid = () => {
@@ -226,22 +365,64 @@ Budget Range: ${formData.budget}
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-purple-50 font-body overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-purple-50 font-body overflow-hidden relative">
+      {/* Confetti */}
+      {showConfetti && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={200}
+          colors={['#FF4742', '#FF6B68', '#E63946', '#7E57C2', '#42A5F5']}
+        />
+      )}
+
+      {/* Cursor follower */}
+      <motion.div
+        ref={cursorRef}
+        className="fixed w-8 h-8 bg-red-500/20 rounded-full pointer-events-none z-50 mix-blend-difference"
+        style={{
+          left: cursorXSpring,
+          top: cursorYSpring,
+        }}
+      />
+
+      {/* Ambient background */}
+      <div 
+        ref={backgroundRef}
+        className="fixed inset-0 opacity-30 pointer-events-none"
+        style={{
+          background: `
+            radial-gradient(circle at 20% 50%, rgba(255, 71, 66, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(126, 87, 194, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 80%, rgba(66, 165, 245, 0.1) 0%, transparent 50%)
+          `,
+          backgroundSize: '100% 100%'
+        }}
+      />
+
       {/* Floating particles background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(30)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-2 h-2 bg-red-200 rounded-full opacity-30"
+            className="absolute rounded-full opacity-20"
+            style={{
+              width: Math.random() * 6 + 2,
+              height: Math.random() * 6 + 2,
+              background: `linear-gradient(45deg, #FF4742, #7E57C2)`,
+            }}
             animate={{
-              x: [0, 100, 0],
-              y: [0, -100, 0],
-              scale: [1, 1.5, 1],
+              x: [0, Math.random() * 200 - 100],
+              y: [0, Math.random() * -200 - 100],
+              scale: [1, Math.random() * 1.5 + 0.5, 1],
+              rotate: [0, 360],
             }}
             transition={{
-              duration: 10 + i * 2,
+              duration: Math.random() * 20 + 10,
               repeat: Infinity,
-              ease: "linear"
+              ease: "linear",
+              delay: Math.random() * 5,
             }}
             style={{
               left: `${Math.random() * 100}%`,
@@ -391,30 +572,64 @@ Budget Range: ${formData.budget}
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                     variants={containerVariants}
                   >
-                    {projectTypes.map((type, index) => (
-                      <motion.button
-                        key={type.id}
-                        variants={cardVariants}
-                        whileHover="hover"
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => updateFormData('projectType', type.id)}
-                        className={`p-6 rounded-2xl border-2 transition-all text-left relative overflow-hidden ${
-                          formData.projectType === type.id
-                            ? 'border-red-500 bg-red-50 shadow-lg'
-                            : 'border-gray-200 bg-white hover:border-red-300'
-                        }`}
-                        style={{ animationDelay: `${index * 0.1}s` }}
-                      >
-                        <div className={`absolute inset-0 bg-gradient-to-br ${type.gradient} opacity-0 transition-opacity ${
-                          formData.projectType === type.id ? 'opacity-10' : ''
-                        }`} />
-                        <div className="relative z-10">
-                          <div className="text-4xl mb-4">{type.icon}</div>
-                          <h3 className="font-bold text-gray-800 mb-2 font-display">{type.name}</h3>
-                          <p className="text-sm text-gray-600 font-body">{type.desc}</p>
-                        </div>
-                      </motion.button>
-                    ))}
+                    {projectTypes.map((type, index) => {
+                      const IconComponent = type.icon;
+                      return (
+                        <motion.button
+                          key={type.id}
+                          variants={cardVariants}
+                          whileHover="hover"
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => updateFormData('projectType', type.id)}
+                          className={`p-8 rounded-2xl border-2 transition-all text-left relative overflow-hidden backdrop-blur-sm ${
+                            formData.projectType === type.id
+                              ? `border-red-500 bg-red-50/80 shadow-2xl ${type.glow}`
+                              : 'border-gray-200/50 bg-white/60 hover:border-red-300 hover:bg-white/80'
+                          }`}
+                          style={{ animationDelay: `${index * 0.1}s` }}
+                        >
+                          <div className={`absolute inset-0 bg-gradient-to-br ${type.gradient} opacity-0 transition-all duration-500 ${
+                            formData.projectType === type.id ? 'opacity-20' : 'hover:opacity-5'
+                          }`} />
+                          
+                          {/* Glow effect */}
+                          <motion.div
+                            className={`absolute inset-0 bg-gradient-to-br ${type.gradient} opacity-0 blur-xl`}
+                            animate={{
+                              opacity: formData.projectType === type.id ? 0.3 : 0,
+                            }}
+                            transition={{ duration: 0.5 }}
+                          />
+                          
+                          <div className="relative z-10">
+                            <motion.div 
+                              className="mb-6 flex items-center justify-center w-16 h-16 rounded-2xl bg-white/50 backdrop-blur-sm"
+                              whileHover={{ rotate: 360, scale: 1.1 }}
+                              transition={{ duration: 0.6 }}
+                            >
+                              <IconComponent 
+                                size={32} 
+                                className={`${formData.projectType === type.id ? 'text-red-600' : 'text-gray-600'} transition-colors`}
+                              />
+                            </motion.div>
+                            <h3 className="font-bold text-gray-800 mb-3 font-display text-lg">{type.name}</h3>
+                            <p className="text-sm text-gray-600 font-body leading-relaxed">{type.desc}</p>
+                            
+                            {/* Selection indicator */}
+                            <motion.div
+                              className="absolute top-4 right-4"
+                              animate={{
+                                scale: formData.projectType === type.id ? 1 : 0,
+                                rotate: formData.projectType === type.id ? 0 : 180,
+                              }}
+                              transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                            >
+                              <CheckCircle2 size={24} className="text-red-500" />
+                            </motion.div>
+                          </div>
+                        </motion.button>
+                      );
+                    })}
                   </motion.div>
                 </motion.div>
               )}
@@ -440,24 +655,66 @@ Budget Range: ${formData.budget}
                     className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
                     variants={containerVariants}
                   >
-                    {techStacks.map((tech, index) => (
-                      <motion.button
-                        key={tech.name}
-                        variants={itemVariants}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => toggleArrayItem('techStack', tech.name)}
-                        className={`p-4 rounded-xl border-2 transition-all font-medium ${
-                          formData.techStack.includes(tech.name)
-                            ? 'border-red-500 bg-red-50 shadow-lg scale-105'
-                            : `border-gray-200 ${tech.color} hover:border-red-300`
-                        }`}
-                        style={{ animationDelay: `${index * 0.05}s` }}
-                      >
-                        <div className="text-2xl mb-2">{tech.icon}</div>
-                        <div className="text-sm font-body">{tech.name}</div>
-                      </motion.button>
-                    ))}
+                    {techStacks.map((tech, index) => {
+                      const IconComponent = tech.icon;
+                      return (
+                        <motion.button
+                          key={tech.name}
+                          variants={itemVariants}
+                          whileHover={{ scale: 1.05, y: -2 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => toggleArrayItem('techStack', tech.name)}
+                          className={`p-6 rounded-xl border-2 transition-all font-medium backdrop-blur-sm relative overflow-hidden ${
+                            formData.techStack.includes(tech.name)
+                              ? `border-red-500 bg-red-50/80 shadow-2xl ${tech.glow} scale-105`
+                              : `border-gray-200/50 ${tech.color} hover:border-red-300 bg-white/60`
+                          }`}
+                          style={{ animationDelay: `${index * 0.05}s` }}
+                        >
+                          {/* Pulse effect for selected items */}
+                          <motion.div
+                            className="absolute inset-0 bg-red-500/10 rounded-xl"
+                            animate={{
+                              scale: formData.techStack.includes(tech.name) ? [1, 1.05, 1] : 1,
+                              opacity: formData.techStack.includes(tech.name) ? [0.5, 0.8, 0.5] : 0,
+                            }}
+                            transition={{
+                              duration: 2,
+                              repeat: formData.techStack.includes(tech.name) ? Infinity : 0,
+                              ease: "easeInOut"
+                            }}
+                          />
+                          
+                          <div className="relative z-10 flex flex-col items-center">
+                            <motion.div
+                              className="mb-3 p-2 rounded-lg bg-white/50"
+                              whileHover={{ rotate: 360 }}
+                              transition={{ duration: 0.5 }}
+                            >
+                              <IconComponent 
+                                size={24} 
+                                className={`${formData.techStack.includes(tech.name) ? 'text-red-600' : 'text-gray-600'} transition-colors`}
+                              />
+                            </motion.div>
+                            <div className="text-sm font-body font-semibold">{tech.name}</div>
+                            
+                            {/* Selection indicator */}
+                            <motion.div
+                              className="absolute -top-1 -right-1"
+                              animate={{
+                                scale: formData.techStack.includes(tech.name) ? 1 : 0,
+                                rotate: formData.techStack.includes(tech.name) ? 0 : 180,
+                              }}
+                              transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                            >
+                              <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                                <CheckCircle2 size={16} className="text-white" />
+                              </div>
+                            </motion.div>
+                          </div>
+                        </motion.button>
+                      );
+                    })}
                   </motion.div>
                 </motion.div>
               )}
@@ -483,32 +740,67 @@ Budget Range: ${formData.budget}
                     className="grid grid-cols-1 md:grid-cols-2 gap-4"
                     variants={containerVariants}
                   >
-                    {commonFeatures.map((feature, index) => (
-                      <motion.button
-                        key={feature.name}
-                        variants={itemVariants}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={() => toggleArrayItem('features', feature.name)}
-                        className={`p-6 rounded-xl border-2 transition-all text-left ${
-                          formData.features.includes(feature.name)
-                            ? 'border-red-500 bg-red-50 shadow-lg'
-                            : 'border-gray-200 bg-white hover:border-red-300'
-                        }`}
-                        style={{ animationDelay: `${index * 0.05}s` }}
-                      >
-                        <div className="flex items-center">
-                          <span className="text-3xl mr-4">{feature.icon}</span>
-                          <div>
-                            <h3 className="font-bold text-gray-800 font-display">{feature.name}</h3>
-                            <p className="text-sm text-gray-600 font-body">{feature.desc}</p>
+                    {commonFeatures.map((feature, index) => {
+                      const IconComponent = feature.icon;
+                      return (
+                        <motion.button
+                          key={feature.name}
+                          variants={itemVariants}
+                          whileHover={{ scale: 1.02, y: -2 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => toggleArrayItem('features', feature.name)}
+                          className={`p-6 rounded-xl border-2 transition-all text-left backdrop-blur-sm relative overflow-hidden ${
+                            formData.features.includes(feature.name)
+                              ? 'border-red-500 bg-red-50/80 shadow-2xl'
+                              : 'border-gray-200/50 bg-white/60 hover:border-red-300 hover:bg-white/80'
+                          }`}
+                          style={{ animationDelay: `${index * 0.05}s` }}
+                        >
+                          {/* Glow effect */}
+                          <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-purple-500/10 opacity-0"
+                            animate={{
+                              opacity: formData.features.includes(feature.name) ? 1 : 0,
+                            }}
+                            transition={{ duration: 0.3 }}
+                          />
+                          
+                          <div className="flex items-center relative z-10">
+                            <motion.div
+                              className="mr-4 p-3 rounded-xl bg-white/50 backdrop-blur-sm"
+                              whileHover={{ rotate: 360, scale: 1.1 }}
+                              transition={{ duration: 0.6 }}
+                            >
+                              <IconComponent 
+                                size={24} 
+                                className={`${formData.features.includes(feature.name) ? 'text-red-600' : 'text-gray-600'} transition-colors`}
+                              />
+                            </motion.div>
+                            <div className="flex-1">
+                              <h3 className="font-bold text-gray-800 font-display mb-1">{feature.name}</h3>
+                              <p className="text-sm text-gray-600 font-body">{feature.desc}</p>
+                            </div>
+                            <motion.div
+                              className="ml-4"
+                              animate={{
+                                scale: formData.features.includes(feature.name) ? [1, 1.2, 1] : 1,
+                              }}
+                              transition={{
+                                duration: 0.5,
+                                repeat: formData.features.includes(feature.name) ? Infinity : 0,
+                                repeatDelay: 2,
+                              }}
+                            >
+                              {formData.features.includes(feature.name) ? (
+                                <CheckCircle2 size={24} className="text-red-500" />
+                              ) : (
+                                <div className="w-6 h-6 border-2 border-gray-300 rounded-full" />
+                              )}
+                            </motion.div>
                           </div>
-                          <div className="ml-auto">
-                            {formData.features.includes(feature.name) ? '✅' : '⬜'}
-                          </div>
-                        </div>
-                      </motion.button>
-                    ))}
+                        </motion.button>
+                      );
+                    })}
                   </motion.div>
                 </motion.div>
               )}
@@ -599,12 +891,14 @@ Budget Range: ${formData.budget}
                   <motion.div variants={itemVariants}>
                     <motion.button
                       onClick={handleSubmit}
-                      className="px-12 py-4 bg-gradient-primary text-white rounded-2xl font-bold text-xl shadow-2xl relative overflow-hidden"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                      disabled={isGenerating}
+                      className="px-12 py-6 bg-gradient-primary text-white rounded-2xl font-bold text-xl shadow-2xl relative overflow-hidden disabled:opacity-70"
+                      whileHover={{ scale: isGenerating ? 1 : 1.05 }}
+                      whileTap={{ scale: isGenerating ? 1 : 0.95 }}
                     >
+                      {/* Shimmer effect */}
                       <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent"
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
                         animate={{
                           x: ['-100%', '100%'],
                         }}
@@ -614,9 +908,34 @@ Budget Range: ${formData.budget}
                           ease: "linear"
                         }}
                       />
+                      
+                      {/* Glow effect */}
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-red-500 to-purple-500 blur-xl opacity-50"
+                        animate={{
+                          scale: [1, 1.1, 1],
+                          opacity: [0.5, 0.8, 0.5],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      />
+                      
                       <span className="relative z-10 flex items-center">
-                        <span className="material-symbols-outlined mr-3">auto_awesome</span>
-                        Generate Quotation
+                        <motion.div
+                          animate={{ rotate: isGenerating ? 360 : 0 }}
+                          transition={{ duration: 1, repeat: isGenerating ? Infinity : 0, ease: "linear" }}
+                        >
+                          {isGenerating ? (
+                            <RefreshCw size={24} className="mr-3" />
+                          ) : (
+                            <Wand2 size={24} className="mr-3" />
+                          )}
+                        </motion.div>
+                        {isGenerating ? 'Generating Magic...' : 'Generate Quotation'}
+                        <Sparkles size={20} className="ml-3" />
                       </span>
                     </motion.button>
                   </motion.div>
@@ -628,11 +947,11 @@ Budget Range: ${formData.budget}
                 <motion.button
                   onClick={handlePrev}
                   disabled={currentStep === 1}
-                  className="inline-flex items-center px-6 py-3 text-gray-600 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium rounded-xl hover:bg-white/50"
-                  whileHover={{ scale: currentStep === 1 ? 1 : 1.05 }}
+                  className="inline-flex items-center px-6 py-3 text-gray-600 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium rounded-xl hover:bg-white/50 backdrop-blur-sm"
+                  whileHover={{ scale: currentStep === 1 ? 1 : 1.05, x: currentStep === 1 ? 0 : -2 }}
                   whileTap={{ scale: currentStep === 1 ? 1 : 0.95 }}
                 >
-                  <span className="material-symbols-outlined mr-2">arrow_back</span>
+                  <ArrowLeft size={20} className="mr-2" />
                   Previous
                 </motion.button>
                 
@@ -640,14 +959,32 @@ Budget Range: ${formData.budget}
                   {Array.from({ length: totalSteps }, (_, i) => (
                     <motion.div
                       key={i}
-                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      className={`relative rounded-full transition-all duration-500 ${
                         i + 1 <= currentStep ? 'bg-red-500' : 'bg-gray-300'
                       }`}
                       animate={{
-                        scale: i + 1 === currentStep ? 1.3 : 1,
+                        width: i + 1 === currentStep ? 32 : 12,
+                        height: 12,
                         opacity: i + 1 <= currentStep ? 1 : 0.5
                       }}
-                    />
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    >
+                      {/* Pulse effect for current step */}
+                      {i + 1 === currentStep && (
+                        <motion.div
+                          className="absolute inset-0 bg-red-500 rounded-full"
+                          animate={{
+                            scale: [1, 1.5, 1],
+                            opacity: [0.5, 0, 0.5],
+                          }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }}
+                        />
+                      )}
+                    </motion.div>
                   ))}
                 </div>
                 
@@ -655,12 +992,16 @@ Budget Range: ${formData.budget}
                   <motion.button
                     onClick={handleNext}
                     disabled={!isStepValid()}
-                    className="inline-flex items-center px-6 py-3 bg-gradient-primary text-white rounded-xl hover-glow disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium"
-                    whileHover={{ scale: isStepValid() ? 1.05 : 1 }}
+                    className="inline-flex items-center px-6 py-3 bg-gradient-primary text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium shadow-lg backdrop-blur-sm"
+                    whileHover={{ 
+                      scale: isStepValid() ? 1.05 : 1, 
+                      x: isStepValid() ? 2 : 0,
+                      boxShadow: isStepValid() ? "0 10px 25px rgba(255, 71, 66, 0.3)" : "0 4px 6px rgba(0, 0, 0, 0.1)"
+                    }}
                     whileTap={{ scale: isStepValid() ? 0.95 : 1 }}
                   >
                     Next
-                    <span className="material-symbols-outlined ml-2">arrow_forward</span>
+                    <ArrowRight size={20} className="ml-2" />
                   </motion.button>
                 ) : (
                   <div className="w-24"></div>
