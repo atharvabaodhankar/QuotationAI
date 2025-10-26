@@ -413,7 +413,7 @@ Budget Range: ${formData.budget}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span className="mr-2 material-symbols-outlined">refresh</span>
+              <RefreshCw size={16} className="mr-2" />
               Create New Quote
             </motion.button>
             
@@ -428,7 +428,7 @@ Budget Range: ${formData.budget}
               to="/" 
               className="inline-flex items-center px-6 py-3 text-gray-600 hover:text-gray-800 transition-colors font-medium hover-lift rounded-xl bg-white shadow-lg"
             >
-              <span className="mr-2 material-symbols-outlined">home</span>
+              <Home size={16} className="mr-2" />
               Back to Home
             </Link>
           </motion.div>
@@ -521,53 +521,54 @@ Budget Range: ${formData.budget}
         ))}
       </div>
 
-      <div className="container mx-auto px-4 py-8 relative z-10">
-        {/* Header */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 relative z-10">
+        {/* Header - Mobile Responsive */}
         <motion.div 
-          className="flex items-center justify-between mb-12"
+          className="flex flex-col sm:flex-row items-center justify-between mb-8 sm:mb-12 gap-4"
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
           <Link 
             to="/" 
-            className="inline-flex items-center px-6 py-3 text-red-600 hover:text-red-800 transition-colors font-medium hover-lift rounded-xl bg-white/80 backdrop-blur-sm shadow-lg"
+            className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 text-red-600 hover:text-red-800 transition-colors font-medium hover-lift rounded-xl bg-white/80 backdrop-blur-sm shadow-lg text-sm sm:text-base"
           >
-            <span className="mr-2 material-symbols-outlined">arrow_back</span>
-            Back to Home
+            <ArrowLeft size={16} className="mr-2" />
+            <span className="hidden sm:inline">Back to Home</span>
+            <span className="sm:hidden">Back</span>
           </Link>
           
-          <div className="text-center flex-1">
-            <div className="flex items-center justify-center gap-4 mb-3">
+          <div className="text-center flex-1 order-first sm:order-none">
+            <div className="flex items-center justify-center gap-3 sm:gap-4 mb-2 sm:mb-3">
               <motion.div 
-                className="size-12 rounded-xl overflow-hidden bg-gradient-primary p-1 shadow-lg"
+                className="size-10 sm:size-12 rounded-xl overflow-hidden bg-gradient-primary p-1 shadow-lg"
                 whileHover={{ rotate: 360 }}
                 transition={{ duration: 0.6 }}
               >
                 <img src="/logo.png" alt="QuotationAI" className="w-full h-full object-contain filter brightness-0 invert" />
               </motion.div>
-              <h1 className="text-4xl font-bold text-gray-800 font-display">QuotationAI</h1>
+              <h1 className="text-2xl sm:text-4xl font-bold text-gray-800 font-display">QuotationAI</h1>
             </div>
-            <p className="text-gray-600 font-body">Cinematic quotation experience</p>
+            <p className="text-sm sm:text-base text-gray-600 font-body">Cinematic quotation experience</p>
           </div>
           
-          <div className="w-32"></div>
+          <div className="w-0 sm:w-32"></div>
         </motion.div>
 
-        {/* Progress Bar */}
+        {/* Progress Bar - Mobile Responsive */}
         <motion.div 
-          className="max-w-2xl mx-auto mb-12"
+          className="max-w-2xl mx-auto mb-8 sm:mb-12 px-2"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.4 }}
         >
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-gray-600 font-body">Step {currentStep} of {totalSteps}</span>
-            <span className="text-sm font-medium text-gray-600 font-body">{Math.round((currentStep / totalSteps) * 100)}% Complete</span>
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <span className="text-xs sm:text-sm font-medium text-gray-600 font-body">Step {currentStep} of {totalSteps}</span>
+            <span className="text-xs sm:text-sm font-medium text-gray-600 font-body">{Math.round((currentStep / totalSteps) * 100)}% Complete</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2 shadow-inner">
+          <div className="w-full bg-gray-200 rounded-full h-2 sm:h-3 shadow-inner">
             <motion.div 
-              className="bg-gradient-primary h-2 rounded-full shadow-lg"
+              className="bg-gradient-primary h-2 sm:h-3 rounded-full shadow-lg"
               initial={{ width: 0 }}
               animate={{ width: `${(currentStep / totalSteps) * 100}%` }}
               transition={{ duration: 0.8, ease: "easeOut" }}
@@ -575,8 +576,8 @@ Budget Range: ${formData.budget}
           </div>
         </motion.div>
 
-        {/* Main Content */}
-        <div className="max-w-4xl mx-auto">
+        {/* Main Content - Mobile Responsive */}
+        <div className="max-w-4xl mx-auto px-2 sm:px-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentStep}
@@ -585,26 +586,30 @@ Budget Range: ${formData.budget}
               animate="in"
               exit="out"
               transition={pageTransition}
-              className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-white/20"
+              className="bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden border border-white/20"
             >
-              {/* Step 1: App Name */}
+              {/* Step 1: App Name - Mobile Responsive */}
               {currentStep === 1 && (
                 <motion.div 
-                  className="p-12 text-center min-h-[500px] flex flex-col justify-center"
+                  className="p-6 sm:p-12 text-center min-h-[400px] sm:min-h-[500px] flex flex-col justify-center"
                   variants={containerVariants}
                   initial="hidden"
                   animate="visible"
                 >
-                  <motion.div variants={itemVariants} className="mb-8">
-                    <h2 className="text-4xl font-bold text-gray-800 font-display mb-4">
+                  <motion.div variants={itemVariants} className="mb-6 sm:mb-8">
+                    <div className="inline-flex items-center px-3 sm:px-4 py-2 rounded-full bg-red-50 text-red-600 text-xs sm:text-sm font-medium border border-red-200 mb-6 sm:mb-8">
+                      <Rocket size={16} className="mr-2" />
+                      Free & Open Source AI Tool
+                    </div>
+                    <h2 className="text-2xl sm:text-4xl font-bold text-gray-800 font-display mb-3 sm:mb-4">
                       Welcome to QuotationAI ✨
                     </h2>
-                    <p className="text-xl text-gray-600 font-body">
+                    <p className="text-lg sm:text-xl text-gray-600 font-body">
                       Let's create something amazing together
                     </p>
                   </motion.div>
 
-                  <motion.div variants={itemVariants} className="mb-8">
+                  <motion.div variants={itemVariants} className="mb-6 sm:mb-8">
                     <TypeAnimation
                       sequence={[
                         'What kind of app or project is this quotation for?',
@@ -612,18 +617,18 @@ Budget Range: ${formData.budget}
                       ]}
                       wrapper="h3"
                       speed={50}
-                      className="text-2xl font-semibold text-gray-700 font-display"
+                      className="text-lg sm:text-2xl font-semibold text-gray-700 font-display px-4"
                     />
                   </motion.div>
 
-                  <motion.div variants={itemVariants} className="max-w-md mx-auto">
+                  <motion.div variants={itemVariants} className="max-w-md mx-auto px-4 sm:px-0">
                     <div className="relative">
                       <motion.input
                         type="text"
                         placeholder="Enter your project name..."
                         value={formData.appName}
                         onChange={(e) => updateFormData('appName', e.target.value)}
-                        className="w-full p-6 text-xl border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 transition-all font-body bg-white/50 backdrop-blur-sm"
+                        className="w-full p-4 sm:p-6 text-lg sm:text-xl border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 transition-all font-body bg-white/50 backdrop-blur-sm"
                         whileFocus={{ scale: 1.02 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       />
@@ -640,25 +645,25 @@ Budget Range: ${formData.budget}
                 </motion.div>
               )}
 
-              {/* Step 2: Project Type */}
+              {/* Step 2: Project Type - Mobile Responsive */}
               {currentStep === 2 && (
                 <motion.div 
-                  className="p-12 min-h-[500px]"
+                  className="p-6 sm:p-12 min-h-[400px] sm:min-h-[500px]"
                   variants={containerVariants}
                   initial="hidden"
                   animate="visible"
                 >
-                  <motion.div variants={itemVariants} className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-gray-800 font-display mb-4">
+                  <motion.div variants={itemVariants} className="text-center mb-8 sm:mb-12 px-4 sm:px-0">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 font-display mb-3 sm:mb-4">
                       What type of project are you working on?
                     </h2>
-                    <p className="text-lg text-gray-600 font-body">
+                    <p className="text-base sm:text-lg text-gray-600 font-body">
                       Choose the category that best fits your vision
                     </p>
                   </motion.div>
 
                   <motion.div 
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 px-2 sm:px-0"
                     variants={containerVariants}
                   >
                     {projectTypes.map((type, index) => {
@@ -723,25 +728,25 @@ Budget Range: ${formData.budget}
                 </motion.div>
               )}
 
-              {/* Step 3: Tech Stack */}
+              {/* Step 3: Tech Stack - Mobile Responsive */}
               {currentStep === 3 && (
                 <motion.div 
-                  className="p-12 min-h-[500px]"
+                  className="p-6 sm:p-12 min-h-[400px] sm:min-h-[500px]"
                   variants={containerVariants}
                   initial="hidden"
                   animate="visible"
                 >
-                  <motion.div variants={itemVariants} className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-gray-800 font-display mb-4">
+                  <motion.div variants={itemVariants} className="text-center mb-8 sm:mb-12 px-4 sm:px-0">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 font-display mb-3 sm:mb-4">
                       Choose your tech stack
                     </h2>
-                    <p className="text-lg text-gray-600 font-body">
+                    <p className="text-base sm:text-lg text-gray-600 font-body">
                       Select the technologies you'd like to use (multiple selection)
                     </p>
                   </motion.div>
 
                   <motion.div 
-                    className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                    className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 px-2 sm:px-0"
                     variants={containerVariants}
                   >
                     {techStacks.map((tech, index) => {
@@ -753,7 +758,7 @@ Budget Range: ${formData.budget}
                           whileHover={{ scale: 1.05, y: -2 }}
                           whileTap={{ scale: 0.95 }}
                           onClick={() => toggleArrayItem('techStack', tech.name)}
-                          className={`p-6 rounded-xl border-2 transition-all font-medium backdrop-blur-sm relative overflow-hidden ${
+                          className={`p-4 sm:p-6 rounded-xl border-2 transition-all font-medium backdrop-blur-sm relative overflow-hidden ${
                             formData.techStack.includes(tech.name)
                               ? `border-red-500 bg-red-50/80 shadow-2xl ${tech.glow} scale-105`
                               : `border-gray-200/50 ${tech.color} hover:border-red-300 bg-white/60`
@@ -779,7 +784,7 @@ Budget Range: ${formData.budget}
                           
                           <div className="relative z-10 flex flex-col items-center">
                             <motion.div
-                              className="mb-3 p-3 rounded-xl bg-white/70 backdrop-blur-sm shadow-lg"
+                              className="mb-2 sm:mb-3 p-2 sm:p-3 rounded-xl bg-white/70 backdrop-blur-sm shadow-lg"
                               whileHover={{ rotate: 360, scale: 1.1 }}
                               transition={{ duration: 0.6 }}
                               style={{
@@ -789,7 +794,7 @@ Budget Range: ${formData.budget}
                               }}
                             >
                               <IconComponent 
-                                size={28} 
+                                size={24} 
                                 style={{
                                   color: formData.techStack.includes(tech.name) 
                                     ? tech.brandColor 
@@ -798,7 +803,7 @@ Budget Range: ${formData.budget}
                                 className="transition-all duration-300"
                               />
                             </motion.div>
-                            <div className="text-sm font-body font-semibold text-gray-800">{tech.name}</div>
+                            <div className="text-xs sm:text-sm font-body font-semibold text-gray-800 text-center">{tech.name}</div>
                             
                             {/* Selection indicator with brand color */}
                             <motion.div
@@ -1172,19 +1177,20 @@ Budget Range: ${formData.budget}
               )}
 
               {/* Navigation */}
-              <div className="bg-gray-50/80 backdrop-blur-sm px-8 py-6 flex justify-between items-center border-t border-gray-200/50">
+              <div className="bg-gray-50/80 backdrop-blur-sm px-4 sm:px-8 py-4 sm:py-6 flex justify-between items-center border-t border-gray-200/50">
                 <motion.button
                   onClick={handlePrev}
                   disabled={currentStep === 1}
-                  className="inline-flex items-center px-6 py-3 text-gray-600 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium rounded-xl hover:bg-white/50 backdrop-blur-sm"
+                  className="inline-flex items-center px-3 sm:px-6 py-2 sm:py-3 text-gray-600 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium rounded-xl hover:bg-white/50 backdrop-blur-sm text-sm sm:text-base"
                   whileHover={{ scale: currentStep === 1 ? 1 : 1.05, x: currentStep === 1 ? 0 : -2 }}
                   whileTap={{ scale: currentStep === 1 ? 1 : 0.95 }}
                 >
-                  <ArrowLeft size={20} className="mr-2" />
-                  Previous
+                  <ArrowLeft size={16} className="mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">Previous</span>
+                  <span className="sm:hidden">Prev</span>
                 </motion.button>
                 
-                <div className="flex space-x-3">
+                <div className="flex space-x-2 sm:space-x-3">
                   {Array.from({ length: totalSteps }, (_, i) => (
                     <motion.div
                       key={i}
@@ -1221,7 +1227,7 @@ Budget Range: ${formData.budget}
                   <motion.button
                     onClick={handleNext}
                     disabled={!isStepValid()}
-                    className="inline-flex items-center px-6 py-3 bg-gradient-primary text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium shadow-lg backdrop-blur-sm"
+                    className="inline-flex items-center px-3 sm:px-6 py-2 sm:py-3 bg-gradient-primary text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium shadow-lg backdrop-blur-sm text-sm sm:text-base"
                     whileHover={{ 
                       scale: isStepValid() ? 1.05 : 1, 
                       x: isStepValid() ? 2 : 0,
@@ -1229,11 +1235,12 @@ Budget Range: ${formData.budget}
                     }}
                     whileTap={{ scale: isStepValid() ? 0.95 : 1 }}
                   >
-                    Next
-                    <ArrowRight size={20} className="ml-2" />
+                    <span className="hidden sm:inline">Next</span>
+                    <span className="sm:hidden">Next</span>
+                    <ArrowRight size={16} className="ml-1 sm:ml-2" />
                   </motion.button>
                 ) : (
-                  <div className="w-24"></div>
+                  <div className="w-0 sm:w-24"></div>
                 )}
               </div>
             </motion.div>
