@@ -54,7 +54,6 @@ function CinematicWizard() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [timelineOpen, setTimelineOpen] = useState(false);
   const [budgetOpen, setBudgetOpen] = useState(false);
-  const cursorRef = useRef(null);
   const backgroundRef = useRef(null);
   const [formData, setFormData] = useState({
     appName: '',
@@ -83,22 +82,7 @@ function CinematicWizard() {
     { value: 'Above ₹5,00,000', label: 'Above ₹5,00,000', desc: 'Premium project', icon: Sparkles, color: 'text-red-600' }
   ];
 
-  // Cursor follower
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
-  const springConfig = { damping: 25, stiffness: 700 };
-  const cursorXSpring = useSpring(cursorX, springConfig);
-  const cursorYSpring = useSpring(cursorY, springConfig);
 
-  useEffect(() => {
-    const moveCursor = (e) => {
-      cursorX.set(e.clientX - 16);
-      cursorY.set(e.clientY - 16);
-    };
-
-    window.addEventListener('mousemove', moveCursor);
-    return () => window.removeEventListener('mousemove', moveCursor);
-  }, [cursorX, cursorY]);
 
   // Background ambient animation
   useEffect(() => {
@@ -466,15 +450,7 @@ Budget Range: ${formData.budget}
         />
       )}
 
-      {/* Cursor follower */}
-      <motion.div
-        ref={cursorRef}
-        className="fixed w-8 h-8 bg-red-500/20 rounded-full pointer-events-none z-50 mix-blend-difference"
-        style={{
-          left: cursorXSpring,
-          top: cursorYSpring,
-        }}
-      />
+
 
       {/* Ambient background */}
       <div 
