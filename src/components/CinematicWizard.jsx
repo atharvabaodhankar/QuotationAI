@@ -42,6 +42,8 @@ function CinematicWizard() {
   const [currentStep, setCurrentStep] = useState(1);
   const [showConfetti, setShowConfetti] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [timelineOpen, setTimelineOpen] = useState(false);
+  const [budgetOpen, setBudgetOpen] = useState(false);
   const cursorRef = useRef(null);
   const backgroundRef = useRef(null);
   const [formData, setFormData] = useState({
@@ -54,6 +56,22 @@ function CinematicWizard() {
   });
 
   const totalSteps = 6;
+
+  const timelineOptions = [
+    { value: '1-2 weeks', label: '1-2 weeks', desc: 'Rush delivery', icon: Lightning, color: 'text-red-600' },
+    { value: '3-4 weeks', label: '3-4 weeks', desc: 'Fast delivery', icon: Zap, color: 'text-orange-600' },
+    { value: '1-2 months', label: '1-2 months', desc: 'Standard timeline', icon: Star, color: 'text-blue-600' },
+    { value: '2-3 months', label: '2-3 months', desc: 'Complex project', icon: Crown, color: 'text-purple-600' },
+    { value: '3+ months', label: '3+ months', desc: 'Large scale', icon: Rocket, color: 'text-green-600' }
+  ];
+
+  const budgetOptions = [
+    { value: 'Under ₹50,000', label: 'Under ₹50,000', desc: 'Small project', icon: Heart, color: 'text-green-600' },
+    { value: '₹50,000 - ₹1,00,000', label: '₹50,000 - ₹1,00,000', desc: 'Medium project', icon: Star, color: 'text-blue-600' },
+    { value: '₹1,00,000 - ₹2,50,000', label: '₹1,00,000 - ₹2,50,000', desc: 'Large project', icon: Crown, color: 'text-purple-600' },
+    { value: '₹2,50,000 - ₹5,00,000', label: '₹2,50,000 - ₹5,00,000', desc: 'Enterprise project', icon: Rocket, color: 'text-orange-600' },
+    { value: 'Above ₹5,00,000', label: 'Above ₹5,00,000', desc: 'Premium project', icon: Sparkles, color: 'text-red-600' }
+  ];
 
   // Cursor follower
   const cursorX = useMotionValue(-100);
@@ -95,6 +113,19 @@ function CinematicWizard() {
       setTimeout(() => document.body.removeChild(ping), 1000);
     }
   }, [currentStep]);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.dropdown-container')) {
+        setTimelineOpen(false);
+        setBudgetOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Animation variants
   const pageVariants = {
@@ -822,41 +853,165 @@ Budget Range: ${formData.budget}
                     </p>
                   </motion.div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
-                    <motion.div variants={itemVariants}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    {/* Timeline Dropdown */}
+                    <motion.div variants={itemVariants} className="relative dropdown-container">
                       <label className="block text-lg font-semibold text-gray-700 mb-4 font-display">
                         Preferred Timeline
                       </label>
-                      <select
-                        value={formData.timeline}
-                        onChange={(e) => updateFormData('timeline', e.target.value)}
-                        className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-4 focus:ring-red-100 transition-all font-body bg-white"
+                      
+                      {/* Custom Dropdown Trigger */}
+                      <motion.button
+                        onClick={() => setTimelineOpen(!timelineOpen)}
+                        className="w-full p-4 border-2 border-gray-200 rounded-xl bg-white/80 backdrop-blur-sm text-left flex items-center justify-between hover:border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-100 transition-all font-body"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                       >
-                        <option value="">Select timeline...</option>
-                        <option value="1-2 weeks">1-2 weeks (Rush)</option>
-                        <option value="3-4 weeks">3-4 weeks (Fast)</option>
-                        <option value="1-2 months">1-2 months (Standard)</option>
-                        <option value="2-3 months">2-3 months (Complex)</option>
-                        <option value="3+ months">3+ months (Large scale)</option>
-                      </select>
+                        <div className="flex items-center">
+                          {formData.timeline ? (
+                            <>
+                              {(() => {
+                                const selected = timelineOptions.find(opt => opt.value === formData.timeline);
+                                const IconComponent = selected?.icon;
+                                return (
+                                  <>
+                                    <IconComponent size={20} className={`mr-3 ${selected?.color}`} />
+                                    <div>
+                                      <div className="font-semibold">{selected?.label}</div>
+                                      <div className="text-sm text-gray-500">{selected?.desc}</div>
+                                    </div>
+                                  </>
+                                );
+                              })()}
+                            </>
+                          ) : (
+                            <span className="text-gray-500">Select timeline...</span>
+                          )}
+                        </div>
+                        <motion.div
+                          animate={{ rotate: timelineOpen ? 180 : 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <ArrowRight size={20} className="text-gray-400 rotate-90" />
+                        </motion.div>
+                      </motion.button>
+
+                      {/* Custom Dropdown Menu */}
+                      <AnimatePresence>
+                        {timelineOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
+                            className="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-sm border border-gray-200 rounded-xl shadow-2xl z-50 overflow-hidden"
+                          >
+                            {timelineOptions.map((option, index) => {
+                              const IconComponent = option.icon;
+                              return (
+                                <motion.button
+                                  key={option.value}
+                                  onClick={() => {
+                                    updateFormData('timeline', option.value);
+                                    setTimelineOpen(false);
+                                  }}
+                                  className="w-full p-4 text-left hover:bg-red-50 transition-colors flex items-center border-b border-gray-100 last:border-b-0"
+                                  whileHover={{ x: 4, backgroundColor: 'rgba(255, 71, 66, 0.05)' }}
+                                  initial={{ opacity: 0, x: -20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: index * 0.05 }}
+                                >
+                                  <IconComponent size={20} className={`mr-3 ${option.color}`} />
+                                  <div>
+                                    <div className="font-semibold text-gray-800">{option.label}</div>
+                                    <div className="text-sm text-gray-500">{option.desc}</div>
+                                  </div>
+                                </motion.button>
+                              );
+                            })}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </motion.div>
 
-                    <motion.div variants={itemVariants}>
+                    {/* Budget Dropdown */}
+                    <motion.div variants={itemVariants} className="relative dropdown-container">
                       <label className="block text-lg font-semibold text-gray-700 mb-4 font-display">
                         Budget Range
                       </label>
-                      <select
-                        value={formData.budget}
-                        onChange={(e) => updateFormData('budget', e.target.value)}
-                        className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-4 focus:ring-red-100 transition-all font-body bg-white"
+                      
+                      {/* Custom Dropdown Trigger */}
+                      <motion.button
+                        onClick={() => setBudgetOpen(!budgetOpen)}
+                        className="w-full p-4 border-2 border-gray-200 rounded-xl bg-white/80 backdrop-blur-sm text-left flex items-center justify-between hover:border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-100 transition-all font-body"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                       >
-                        <option value="">Select budget...</option>
-                        <option value="Under ₹50,000">Under ₹50,000</option>
-                        <option value="₹50,000 - ₹1,00,000">₹50,000 - ₹1,00,000</option>
-                        <option value="₹1,00,000 - ₹2,50,000">₹1,00,000 - ₹2,50,000</option>
-                        <option value="₹2,50,000 - ₹5,00,000">₹2,50,000 - ₹5,00,000</option>
-                        <option value="Above ₹5,00,000">Above ₹5,00,000</option>
-                      </select>
+                        <div className="flex items-center">
+                          {formData.budget ? (
+                            <>
+                              {(() => {
+                                const selected = budgetOptions.find(opt => opt.value === formData.budget);
+                                const IconComponent = selected?.icon;
+                                return (
+                                  <>
+                                    <IconComponent size={20} className={`mr-3 ${selected?.color}`} />
+                                    <div>
+                                      <div className="font-semibold">{selected?.label}</div>
+                                      <div className="text-sm text-gray-500">{selected?.desc}</div>
+                                    </div>
+                                  </>
+                                );
+                              })()}
+                            </>
+                          ) : (
+                            <span className="text-gray-500">Select budget...</span>
+                          )}
+                        </div>
+                        <motion.div
+                          animate={{ rotate: budgetOpen ? 180 : 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <ArrowRight size={20} className="text-gray-400 rotate-90" />
+                        </motion.div>
+                      </motion.button>
+
+                      {/* Custom Dropdown Menu */}
+                      <AnimatePresence>
+                        {budgetOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
+                            className="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-sm border border-gray-200 rounded-xl shadow-2xl z-50 overflow-hidden"
+                          >
+                            {budgetOptions.map((option, index) => {
+                              const IconComponent = option.icon;
+                              return (
+                                <motion.button
+                                  key={option.value}
+                                  onClick={() => {
+                                    updateFormData('budget', option.value);
+                                    setBudgetOpen(false);
+                                  }}
+                                  className="w-full p-4 text-left hover:bg-red-50 transition-colors flex items-center border-b border-gray-100 last:border-b-0"
+                                  whileHover={{ x: 4, backgroundColor: 'rgba(255, 71, 66, 0.05)' }}
+                                  initial={{ opacity: 0, x: -20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: index * 0.05 }}
+                                >
+                                  <IconComponent size={20} className={`mr-3 ${option.color}`} />
+                                  <div>
+                                    <div className="font-semibold text-gray-800">{option.label}</div>
+                                    <div className="text-sm text-gray-500">{option.desc}</div>
+                                  </div>
+                                </motion.button>
+                              );
+                            })}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </motion.div>
                   </div>
                 </motion.div>
