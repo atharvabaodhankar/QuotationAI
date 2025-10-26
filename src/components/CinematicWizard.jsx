@@ -33,6 +33,16 @@ import {
   Zap as Lightning,
   Monitor
 } from "lucide-react";
+import { 
+  SiReact, 
+  SiNextdotjs, 
+  SiVuedotjs, 
+  SiAngular, 
+  SiNodedotjs, 
+  SiPython, 
+  SiTailwindcss, 
+  SiFirebase 
+} from "react-icons/si";
 import useQuotationAI from "../hooks/useQuotationAI";
 import QuotationDisplay from "./QuotationDisplay";
 import LoadingSpinner from "./LoadingSpinner";
@@ -240,14 +250,62 @@ function CinematicWizard() {
   ];
 
   const techStacks = [
-    { name: 'React', icon: Code, color: 'bg-blue-100 text-blue-700 border-blue-200', glow: 'hover:shadow-blue-500/20' },
-    { name: 'Next.js', icon: Zap, color: 'bg-gray-100 text-gray-700 border-gray-200', glow: 'hover:shadow-gray-500/20' },
-    { name: 'Vue.js', icon: Star, color: 'bg-green-100 text-green-700 border-green-200', glow: 'hover:shadow-green-500/20' },
-    { name: 'Angular', icon: Crown, color: 'bg-red-100 text-red-700 border-red-200', glow: 'hover:shadow-red-500/20' },
-    { name: 'Node.js', icon: Database, color: 'bg-green-100 text-green-700 border-green-200', glow: 'hover:shadow-green-500/20' },
-    { name: 'Python', icon: Code, color: 'bg-yellow-100 text-yellow-700 border-yellow-200', glow: 'hover:shadow-yellow-500/20' },
-    { name: 'Tailwind', icon: Sparkles, color: 'bg-cyan-100 text-cyan-700 border-cyan-200', glow: 'hover:shadow-cyan-500/20' },
-    { name: 'Firebase', icon: Rocket, color: 'bg-orange-100 text-orange-700 border-orange-200', glow: 'hover:shadow-orange-500/20' }
+    { 
+      name: 'React', 
+      icon: SiReact, 
+      color: 'bg-blue-50 text-blue-600 border-blue-200', 
+      glow: 'hover:shadow-blue-500/20',
+      brandColor: '#61DAFB'
+    },
+    { 
+      name: 'Next.js', 
+      icon: SiNextdotjs, 
+      color: 'bg-gray-50 text-gray-800 border-gray-200', 
+      glow: 'hover:shadow-gray-500/20',
+      brandColor: '#000000'
+    },
+    { 
+      name: 'Vue.js', 
+      icon: SiVuedotjs, 
+      color: 'bg-green-50 text-green-600 border-green-200', 
+      glow: 'hover:shadow-green-500/20',
+      brandColor: '#4FC08D'
+    },
+    { 
+      name: 'Angular', 
+      icon: SiAngular, 
+      color: 'bg-red-50 text-red-600 border-red-200', 
+      glow: 'hover:shadow-red-500/20',
+      brandColor: '#DD0031'
+    },
+    { 
+      name: 'Node.js', 
+      icon: SiNodedotjs, 
+      color: 'bg-green-50 text-green-700 border-green-200', 
+      glow: 'hover:shadow-green-500/20',
+      brandColor: '#339933'
+    },
+    { 
+      name: 'Python', 
+      icon: SiPython, 
+      color: 'bg-yellow-50 text-yellow-600 border-yellow-200', 
+      glow: 'hover:shadow-yellow-500/20',
+      brandColor: '#3776AB'
+    },
+    { 
+      name: 'Tailwind', 
+      icon: SiTailwindcss, 
+      color: 'bg-cyan-50 text-cyan-600 border-cyan-200', 
+      glow: 'hover:shadow-cyan-500/20',
+      brandColor: '#06B6D4'
+    },
+    { 
+      name: 'Firebase', 
+      icon: SiFirebase, 
+      color: 'bg-orange-50 text-orange-600 border-orange-200', 
+      glow: 'hover:shadow-orange-500/20',
+      brandColor: '#FFCA28'
+    }
   ];
 
   const commonFeatures = [
@@ -702,12 +760,15 @@ Budget Range: ${formData.budget}
                           }`}
                           style={{ animationDelay: `${index * 0.05}s` }}
                         >
-                          {/* Pulse effect for selected items */}
+                          {/* Pulse effect for selected items with brand color */}
                           <motion.div
-                            className="absolute inset-0 bg-red-500/10 rounded-xl"
+                            className="absolute inset-0 rounded-xl"
+                            style={{
+                              backgroundColor: `${tech.brandColor}10`
+                            }}
                             animate={{
                               scale: formData.techStack.includes(tech.name) ? [1, 1.05, 1] : 1,
-                              opacity: formData.techStack.includes(tech.name) ? [0.5, 0.8, 0.5] : 0,
+                              opacity: formData.techStack.includes(tech.name) ? [0.3, 0.6, 0.3] : 0,
                             }}
                             transition={{
                               duration: 2,
@@ -718,18 +779,28 @@ Budget Range: ${formData.budget}
                           
                           <div className="relative z-10 flex flex-col items-center">
                             <motion.div
-                              className="mb-3 p-2 rounded-lg bg-white/50"
-                              whileHover={{ rotate: 360 }}
-                              transition={{ duration: 0.5 }}
+                              className="mb-3 p-3 rounded-xl bg-white/70 backdrop-blur-sm shadow-lg"
+                              whileHover={{ rotate: 360, scale: 1.1 }}
+                              transition={{ duration: 0.6 }}
+                              style={{
+                                backgroundColor: formData.techStack.includes(tech.name) 
+                                  ? `${tech.brandColor}15` 
+                                  : 'rgba(255, 255, 255, 0.7)'
+                              }}
                             >
                               <IconComponent 
-                                size={24} 
-                                className={`${formData.techStack.includes(tech.name) ? 'text-red-600' : 'text-gray-600'} transition-colors`}
+                                size={28} 
+                                style={{
+                                  color: formData.techStack.includes(tech.name) 
+                                    ? tech.brandColor 
+                                    : '#6B7280'
+                                }}
+                                className="transition-all duration-300"
                               />
                             </motion.div>
-                            <div className="text-sm font-body font-semibold">{tech.name}</div>
+                            <div className="text-sm font-body font-semibold text-gray-800">{tech.name}</div>
                             
-                            {/* Selection indicator */}
+                            {/* Selection indicator with brand color */}
                             <motion.div
                               className="absolute -top-1 -right-1"
                               animate={{
@@ -738,8 +809,11 @@ Budget Range: ${formData.budget}
                               }}
                               transition={{ type: "spring", stiffness: 500, damping: 30 }}
                             >
-                              <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-                                <CheckCircle2 size={16} className="text-white" />
+                              <div 
+                                className="w-6 h-6 rounded-full flex items-center justify-center shadow-lg"
+                                style={{ backgroundColor: tech.brandColor }}
+                              >
+                                <CheckCircle2 size={14} className="text-white" />
                               </div>
                             </motion.div>
                           </div>
