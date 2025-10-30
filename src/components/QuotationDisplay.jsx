@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import { 
   Download, 
   Share2, 
@@ -10,8 +11,10 @@ import {
   Clock,
   CheckCircle,
   FileText,
-  Settings
+  Settings,
+  Loader
 } from 'lucide-react';
+import PremiumQuotationPDF from './PremiumQuotationPDF';
 import ExportButton from './ExportButton';
 import useCurrencyConverter from '../hooks/useCurrencyConverter';
 
@@ -102,14 +105,31 @@ function QuotationDisplay({ quote }) {
                 <Share2 size={16} />
                 Share
               </motion.button>
-              <motion.button 
-                className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-gradient-primary rounded-lg shadow-sm hover:bg-red-600 transition-colors"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+              <PDFDownloadLink
+                document={<PremiumQuotationPDF quote={quote} discount={discount} currency={currency} />}
+                fileName={`quotation-${quote.projectTitle.toLowerCase().replace(/\s+/g, '-')}.pdf`}
               >
-                <Download size={16} />
-                Download PDF
-              </motion.button>
+                {({ blob, url, loading, error }) => (
+                  <motion.button 
+                    className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-gradient-primary rounded-lg shadow-sm hover:bg-red-600 transition-colors disabled:opacity-70"
+                    whileHover={{ scale: loading ? 1 : 1.02 }}
+                    whileTap={{ scale: loading ? 1 : 0.98 }}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <>
+                        <Loader size={16} className="animate-spin" />
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        <Download size={16} />
+                        Download PDF
+                      </>
+                    )}
+                  </motion.button>
+                )}
+              </PDFDownloadLink>
             </div>
           </motion.div>
 
