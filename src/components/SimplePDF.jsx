@@ -1,3 +1,4 @@
+import React from 'react';
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
@@ -9,7 +10,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     marginBottom: 20,
-    fontWeight: 'bold',
   },
   section: {
     marginBottom: 10,
@@ -19,31 +19,21 @@ const styles = StyleSheet.create({
 const SimplePDF = ({ quote }) => {
   console.log('SimplePDF received quote:', quote);
   
-  if (!quote) {
-    return (
-      <Document>
-        <Page size="A4" style={styles.page}>
-          <Text style={styles.title}>No Quote Data</Text>
-          <View style={styles.section}>
-            <Text>Error: No quote data provided</Text>
-          </View>
-        </Page>
-      </Document>
-    );
-  }
-
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <Text style={styles.title}>Quotation</Text>
+        <Text style={styles.title}>Project Quotation</Text>
         <View style={styles.section}>
-          <Text>Project: {quote.projectTitle || 'N/A'}</Text>
+          <Text>Project: {quote?.projectTitle || 'N/A'}</Text>
         </View>
         <View style={styles.section}>
-          <Text>Total: {quote.totalCost || 'N/A'}</Text>
+          <Text>Total Cost: {quote?.totalCost || 'N/A'}</Text>
         </View>
         <View style={styles.section}>
-          <Text>Duration: {quote.estimatedDuration || 'N/A'}</Text>
+          <Text>Duration: {quote?.estimatedDuration || 'N/A'}</Text>
+        </View>
+        <View style={styles.section}>
+          <Text>Services: {quote?.services?.length || 0} items</Text>
         </View>
       </Page>
     </Document>
