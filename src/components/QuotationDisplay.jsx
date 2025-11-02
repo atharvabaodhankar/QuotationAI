@@ -174,6 +174,12 @@ function QuotationDisplay({ quote }) {
               </h1>
               <p className="text-base font-normal leading-normal text-gray-500">
                 For Project: {quote.projectTitle}
+                {(quote.projectTitle.includes("To be decided") ||
+                  quote.projectTitle.includes("TBD")) && (
+                  <span className="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                    Name pending
+                  </span>
+                )}
               </p>
             </div>
             <div className="flex gap-2">
@@ -186,13 +192,21 @@ function QuotationDisplay({ quote }) {
                 Share
               </motion.button>
               <motion.button
-                className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-orange-600 bg-orange-50 border border-orange-200 rounded-lg shadow-sm hover:bg-orange-100 transition-colors"
+                className={`flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg shadow-sm transition-colors ${
+                  quote.projectTitle.includes("To be decided") ||
+                  quote.projectTitle.includes("TBD")
+                    ? "text-white bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 animate-pulse"
+                    : "text-orange-600 bg-orange-50 border border-orange-200 hover:bg-orange-100"
+                }`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setShowNameSuggestions(!showNameSuggestions)}
               >
                 <Sparkles size={16} />
-                Suggest Names
+                {quote.projectTitle.includes("To be decided") ||
+                quote.projectTitle.includes("TBD")
+                  ? "Choose App Name"
+                  : "Suggest Names"}
               </motion.button>
               <motion.button
                 className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-gradient-primary rounded-lg shadow-sm hover:bg-red-600 transition-colors"

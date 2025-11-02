@@ -76,6 +76,7 @@ function CinematicWizard() {
   const [newFeature, setNewFeature] = useState("");
   const [showNameSelection, setShowNameSelection] = useState(false);
   const [selectedAppName, setSelectedAppName] = useState("");
+  const [nameNotDecided, setNameNotDecided] = useState(false);
 
   const totalSteps = 7;
 
@@ -481,7 +482,7 @@ function CinematicWizard() {
     });
 
     const requirement = `
-App Name: ${formData.appName}
+App Name: ${nameNotDecided ? "To be decided (suggest names)" : formData.appName}
 App Description: ${formData.appDescription}
 Project Type: ${formData.projectType}
 Technology Stack: ${formData.techStack.join(", ")}
@@ -503,7 +504,7 @@ Budget Range: ${formData.budget}
   const isStepValid = () => {
     switch (currentStep) {
       case 1:
-        return formData.appName.length > 0 && formData.appDescription.length > 0;
+        return (formData.appName.length > 0 || nameNotDecided) && formData.appDescription.length > 0;
       case 2:
         return formData.projectType.length > 0;
       case 3:
@@ -542,12 +543,15 @@ Budget Range: ${formData.budget}
                 setCurrentStep(1);
                 setFormData({
                   appName: "",
+                  appDescription: "",
                   projectType: "",
                   techStack: [],
                   features: [],
+                  customFeatures: [],
                   timeline: "",
                   budget: "",
                 });
+                setNameNotDecided(false);
               }}
               className="inline-flex items-center px-6 py-3 text-red-600 hover:text-red-800 transition-colors font-medium hover-lift rounded-xl bg-white shadow-lg"
               whileHover={{ scale: 1.05 }}
@@ -774,13 +778,16 @@ Budget Range: ${formData.budget}
                     <div className="relative">
                       <motion.input
                         type="text"
-                        placeholder="Enter your project name..."
-                        value={formData.appName}
+                        placeholder={nameNotDecided ? "Name will be suggested later..." : "Enter your project name..."}
+                        value={nameNotDecided ? "To be decided" : formData.appName}
                         onChange={(e) =>
-                          updateFormData("appName", e.target.value)
+                          !nameNotDecided && updateFormData("appName", e.target.value)
                         }
-                        className="w-full p-4 sm:p-6 text-lg sm:text-xl border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 transition-all font-body bg-white/50 backdrop-blur-sm"
-                        whileFocus={{ scale: 1.02 }}
+                        disabled={nameNotDecided}
+                        className={`w-full p-4 sm:p-6 text-lg sm:text-xl border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 transition-all font-body bg-white/50 backdrop-blur-sm ${
+                          nameNotDecided ? 'opacity-50 cursor-not-allowed' : ''
+                        }`}
+                        whileFocus={{ scale: nameNotDecided ? 1 : 1.02 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       />
                       <motion.div
@@ -792,6 +799,35 @@ Budget Range: ${formData.budget}
                         transition={{ duration: 0.3 }}
                       />
                     </div>
+
+                    {/* Name Not Decided Option */}
+                    <motion.div
+                      variants={itemVariants}
+                      className="mt-4"
+                    >
+                      <motion.label
+                        className="flex items-center justify-center gap-3 cursor-pointer"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <motion.input
+                          type="checkbox"
+                          checked={nameNotDecided}
+                          onChange={(e) => {
+                            setNameNotDecided(e.target.checked);
+                            if (e.target.checked) {
+                              updateFormData("appName", "TBD");
+                            } else {
+                              updateFormData("appName", "");
+                            }
+                          }}
+                          className="w-5 h-5 text-red-600 bg-white border-2 border-gray-300 rounded focus:ring-red-500 focus:ring-2"
+                        />
+                        <span className="text-gray-600 font-medium">
+                          I haven't decided on a name yet
+                        </span>
+                      </motion.label>
+                    </motion.div>
 
                     {/* App Description Field */}
                     <motion.div
