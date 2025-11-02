@@ -13,6 +13,7 @@ import {
   FileText,
   Settings,
   Loader,
+  Sparkles,
 } from "lucide-react";
 import PremiumQuotationPDF from "./PremiumQuotationPDF";
 import SimplePDF from "./SimplePDF";
@@ -27,7 +28,85 @@ function QuotationDisplay({ quote }) {
     breakdown: true,
     timeline: false,
   });
+  const [showNameSuggestions, setShowNameSuggestions] = useState(false);
+  const [selectedAppName, setSelectedAppName] = useState("");
   const { convertCurrency, symbols, rates } = useCurrencyConverter();
+
+  // App name suggestions based on project description
+  const generateAppNameSuggestions = () => {
+    const description = quote.clientRequirementSummary.toLowerCase();
+
+    if (
+      description.includes("social") ||
+      description.includes("chat") ||
+      description.includes("messaging")
+    ) {
+      return [
+        { name: "ConnectCore", desc: "Social networking platform" },
+        { name: "ChatSphere", desc: "Modern messaging app" },
+        { name: "SocialSync", desc: "Community platform" },
+        { name: "LinkLive", desc: "Live social interactions" },
+        { name: "ShareSpark", desc: "Content sharing network" },
+      ];
+    } else if (
+      description.includes("shop") ||
+      description.includes("ecommerce") ||
+      description.includes("buy") ||
+      description.includes("sell")
+    ) {
+      return [
+        { name: "ShopSphere", desc: "Global marketplace" },
+        { name: "CartCraft", desc: "Artisan marketplace" },
+        { name: "BuyBliss", desc: "Premium shopping experience" },
+        { name: "MarketMagic", desc: "Smart commerce platform" },
+        { name: "TradeTrend", desc: "Trending products hub" },
+      ];
+    } else if (
+      description.includes("health") ||
+      description.includes("fitness") ||
+      description.includes("workout")
+    ) {
+      return [
+        { name: "FitFusion", desc: "Comprehensive fitness tracker" },
+        { name: "HealthHub", desc: "Wellness management platform" },
+        { name: "VitalVibe", desc: "Health monitoring app" },
+        { name: "WellnessWave", desc: "Lifestyle optimization" },
+        { name: "FitForge", desc: "Workout planning tool" },
+      ];
+    } else if (
+      description.includes("learn") ||
+      description.includes("education") ||
+      description.includes("study")
+    ) {
+      return [
+        { name: "LearnLab", desc: "Interactive learning platform" },
+        { name: "EduEdge", desc: "Educational advancement tool" },
+        { name: "SkillSphere", desc: "Skill development hub" },
+        { name: "StudySmart", desc: "Intelligent study assistant" },
+        { name: "KnowledgeKit", desc: "Learning resource center" },
+      ];
+    } else if (
+      description.includes("money") ||
+      description.includes("finance") ||
+      description.includes("budget")
+    ) {
+      return [
+        { name: "MoneyMind", desc: "Financial planning assistant" },
+        { name: "CashCraft", desc: "Budget management tool" },
+        { name: "WealthWise", desc: "Investment tracking platform" },
+        { name: "FinFlow", desc: "Financial dashboard" },
+        { name: "PennyPro", desc: "Expense optimization" },
+      ];
+    } else {
+      return [
+        { name: "AppCraft", desc: "Custom application solution" },
+        { name: "DigitalEdge", desc: "Modern digital platform" },
+        { name: "SmartFlow", desc: "Intelligent workflow system" },
+        { name: "ProActive", desc: "Professional productivity tool" },
+        { name: "InnovateLab", desc: "Innovation-driven platform" },
+      ];
+    }
+  };
 
   if (!quote) return null;
 
@@ -105,6 +184,15 @@ function QuotationDisplay({ quote }) {
               >
                 <Share2 size={16} />
                 Share
+              </motion.button>
+              <motion.button
+                className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-orange-600 bg-orange-50 border border-orange-200 rounded-lg shadow-sm hover:bg-orange-100 transition-colors"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setShowNameSuggestions(!showNameSuggestions)}
+              >
+                <Sparkles size={16} />
+                Suggest Names
               </motion.button>
               <motion.button
                 className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-gradient-primary rounded-lg shadow-sm hover:bg-red-600 transition-colors"
@@ -744,6 +832,74 @@ Date: ${new Date().toLocaleDateString()}
           <ExportButton quote={quote} discount={discount} currency={currency} />
         </motion.aside>
       </div>
+
+      {/* App Name Suggestions Modal */}
+      <AnimatePresence>
+        {showNameSuggestions && (
+          <motion.div
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowNameSuggestions(false)}
+          >
+            <motion.div
+              className="bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl"
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="text-center mb-6">
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                  ✨ Perfect App Names for Your Project
+                </h3>
+                <p className="text-gray-600">
+                  Choose a name that captures your app's essence
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                {generateAppNameSuggestions().map((suggestion, index) => (
+                  <motion.button
+                    key={suggestion.name}
+                    onClick={() => {
+                      setSelectedAppName(suggestion.name);
+                      // Here we would regenerate the quotation with the new name
+                      // For now, just close the modal
+                      setShowNameSuggestions(false);
+                    }}
+                    className="p-4 text-left rounded-xl border-2 border-gray-200 hover:border-red-500 hover:bg-red-50 transition-all group"
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <div className="font-bold text-gray-800 group-hover:text-red-600 transition-colors mb-1">
+                      {suggestion.name}
+                    </div>
+                    <div className="text-sm text-gray-500 group-hover:text-red-500 transition-colors">
+                      {suggestion.desc}
+                    </div>
+                  </motion.button>
+                ))}
+              </div>
+
+              <div className="text-center">
+                <motion.button
+                  onClick={() => setShowNameSuggestions(false)}
+                  className="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Keep current name
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

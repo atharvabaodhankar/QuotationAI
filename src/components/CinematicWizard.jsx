@@ -64,6 +64,7 @@ function CinematicWizard() {
   const backgroundRef = useRef(null);
   const [formData, setFormData] = useState({
     appName: "",
+    appDescription: "",
     projectType: "",
     techStack: [],
     features: [],
@@ -73,6 +74,8 @@ function CinematicWizard() {
   });
 
   const [newFeature, setNewFeature] = useState("");
+  const [showNameSelection, setShowNameSelection] = useState(false);
+  const [selectedAppName, setSelectedAppName] = useState("");
 
   const totalSteps = 7;
 
@@ -144,6 +147,52 @@ function CinematicWizard() {
       color: "text-orange-600",
     },
   ];
+
+  // App name suggestions by category
+  const appNameSuggestions = {
+    "E-commerce": [
+      { name: "ShopSphere", desc: "Global marketplace" },
+      { name: "CartCraft", desc: "Artisan marketplace" },
+      { name: "BuyBliss", desc: "Premium shopping" },
+      { name: "MarketMagic", desc: "Smart commerce" },
+      { name: "TradeTrend", desc: "Trending products" },
+    ],
+    "Social Media": [
+      { name: "ConnectCore", desc: "Social networking" },
+      { name: "ShareSpark", desc: "Content sharing" },
+      { name: "SocialSync", desc: "Community platform" },
+      { name: "LinkLive", desc: "Live interactions" },
+      { name: "ChatCharm", desc: "Messaging app" },
+    ],
+    "Productivity": [
+      { name: "TaskTitan", desc: "Project management" },
+      { name: "WorkWave", desc: "Team collaboration" },
+      { name: "FocusFlow", desc: "Productivity suite" },
+      { name: "PlanPro", desc: "Planning tool" },
+      { name: "EfficiencyEdge", desc: "Workflow optimizer" },
+    ],
+    "Health & Fitness": [
+      { name: "FitFusion", desc: "Fitness tracking" },
+      { name: "HealthHub", desc: "Wellness platform" },
+      { name: "VitalVibe", desc: "Health monitoring" },
+      { name: "WellnessWave", desc: "Lifestyle app" },
+      { name: "FitForge", desc: "Workout planner" },
+    ],
+    "Education": [
+      { name: "LearnLab", desc: "Learning platform" },
+      { name: "EduEdge", desc: "Educational tool" },
+      { name: "SkillSphere", desc: "Skill development" },
+      { name: "StudySmart", desc: "Study assistant" },
+      { name: "KnowledgeKit", desc: "Learning resources" },
+    ],
+    "Finance": [
+      { name: "MoneyMind", desc: "Financial planning" },
+      { name: "CashCraft", desc: "Budget management" },
+      { name: "WealthWise", desc: "Investment tracker" },
+      { name: "FinFlow", desc: "Financial dashboard" },
+      { name: "PennyPro", desc: "Expense tracker" },
+    ],
+  };
 
   // Background ambient animation
   useEffect(() => {
@@ -433,6 +482,7 @@ function CinematicWizard() {
 
     const requirement = `
 App Name: ${formData.appName}
+App Description: ${formData.appDescription}
 Project Type: ${formData.projectType}
 Technology Stack: ${formData.techStack.join(", ")}
 Key Features: ${formData.features.join(", ")}
@@ -453,7 +503,7 @@ Budget Range: ${formData.budget}
   const isStepValid = () => {
     switch (currentStep) {
       case 1:
-        return formData.appName.length > 0;
+        return formData.appName.length > 0 && formData.appDescription.length > 0;
       case 2:
         return formData.projectType.length > 0;
       case 3:
@@ -742,6 +792,30 @@ Budget Range: ${formData.budget}
                         transition={{ duration: 0.3 }}
                       />
                     </div>
+
+                    {/* App Description Field */}
+                    <motion.div
+                      variants={itemVariants}
+                      className="mt-6 relative"
+                    >
+                      <motion.textarea
+                        placeholder="Briefly describe what your app does... (e.g., A social media app for sharing photos with friends)"
+                        value={formData.appDescription}
+                        onChange={(e) => updateFormData("appDescription", e.target.value)}
+                        className="w-full p-4 text-base border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 transition-all font-body bg-white/50 backdrop-blur-sm resize-none"
+                        rows={3}
+                        whileFocus={{ scale: 1.02 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      />
+                      <motion.div
+                        className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-500/20 to-purple-500/20 -z-10"
+                        animate={{
+                          opacity: formData.appDescription ? 1 : 0,
+                          scale: formData.appDescription ? 1 : 0.95,
+                        }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    </motion.div>
                   </motion.div>
                 </motion.div>
               )}
